@@ -1,1 +1,6 @@
-.idea
+# pg
+postgres/pgdata
+postgres/pgadmin_data
+
+# rmq
+rabbitmq/rabbitmq

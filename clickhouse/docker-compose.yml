@@ -1,0 +1,18 @@
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:26.6.1.1193
+    ports:
+      - "8123:8123" # HTTP interface
+      - "9090:9000" # Native client interface
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - clickhouse_logs:/var/log/clickhouse-server
+      - ./config.d/dev-low-cpu.xml:/etc/clickhouse-server/config.d/dev-low-cpu.xml:ro
+    environment:
+      CLICKHOUSE_USER: your_user
+      CLICKHOUSE_PASSWORD: your_password
+      CLICKHOUSE_DB: your_database
+    restart: unless-stopped
+volumes:
+  clickhouse_data:
+  clickhouse_logs:

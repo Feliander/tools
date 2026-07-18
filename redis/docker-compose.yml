@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_PASSWORD: secret
+      REDIS_USER: redis
+      REDIS_USER_PASSWORD: redis
+  
+  redis-insight:
+    image: redis/redisinsight:latest
+    restart: unless-stopped
+    ports:
+      - "5540:5540"
+    volumes:
+      - redis-insight:/data
+
+volumes:
+  redis-insight:

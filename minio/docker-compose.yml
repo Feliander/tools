@@ -1,0 +1,40 @@
+services:
+  # caddy:
+  #   image: caddy:latest
+  #   container_name: caddy 
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./Caddyfile:/etc/caddy/Caddyfile
+  #     - caddy_data:/data
+  #     - caddy_config:/config
+
+  minio:  
+    image: minio/minio:latest  
+    container_name: minio  
+    restart: unless-stopped  
+    volumes:  
+      - minio-storage:/data  
+      - minio-config:/root/.minio  
+    environment:  
+      - MINIO_ROOT_USER=miniouser
+      - MINIO_ROOT_PASSWORD=admin123
+      # - MINIO_BROWSER_REDIRECT_URL=https://your_domain.com/console/
+      # - MINIO_DOMAIN=your_domain.com  
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    healthcheck:  
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]  
+      interval: 30s  
+      timeout: 20s  
+      retries: 3
+
+volumes:
+  # caddy_data:
+  # caddy_config:
+  minio-storage:
+  minio-config:

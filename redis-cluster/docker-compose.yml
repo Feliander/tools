@@ -1,0 +1,58 @@
+# docker-compose.redis-cluster.yml
+services:
+  redis-node-0:
+    image: bitnami/redis-cluster:latest
+    environment:
+      - REDIS_PASSWORD=secret
+      - REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5
+    ports:
+      - "7000:6379"
+
+  redis-node-1:
+    image: bitnami/redis-cluster:latest
+    environment:
+      - REDIS_PASSWORD=secret
+      - REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5
+    ports:
+      - "7001:6379"
+
+  redis-node-2:
+    image: bitnami/redis-cluster:latest
+    environment:
+      - REDIS_PASSWORD=secret
+      - REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5
+    ports:
+      - "7002:6379"
+
+  redis-node-3:
+    image: bitnami/redis-cluster:latest
+    environment:
+      - REDIS_PASSWORD=secret
+      - REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5
+    ports:
+      - "7003:6379"
+
+  redis-node-4:
+    image: bitnami/redis-cluster:latest
+    environment:
+      - REDIS_PASSWORD=secret
+      - REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5
+    ports:
+      - "7004:6379"
+
+  redis-node-5:
+    image: bitnami/redis-cluster:latest
+    depends_on:
+      - redis-node-0
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+      - redis-node-4
+    environment:
+      - REDIS_PASSWORD=secret
+      - REDISCLI_AUTH=secret
+      - REDIS_CLUSTER_REPLICAS=1
+      - REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5
+      - REDIS_CLUSTER_CREATOR=yes
+    ports:
+      - "7005:6379"
