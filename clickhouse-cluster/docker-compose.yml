@@ -1,6 +1,6 @@
 services:
   clickhouse-01:
-    image: "clickhouse/clickhouse-server:25.3.14.14"
+    image: "clickhouse/clickhouse-server:26.7.1.1315"
     user: "101:101"
     container_name: clickhouse-01
     hostname: clickhouse-01
@@ -17,8 +17,12 @@ services:
       - clickhouse-keeper-02
       - clickhouse-keeper-03
     restart: unless-stopped
+    networks:
+      - default
+    extra_hosts:
+      - host.docker.internal:host-gateway
   clickhouse-02:
-    image: "clickhouse/clickhouse-server:25.3.14.14"
+    image: "clickhouse/clickhouse-server:26.7.1.1315"
     user: "101:101"
     container_name: clickhouse-02
     hostname: clickhouse-02
@@ -35,8 +39,12 @@ services:
       - clickhouse-keeper-02
       - clickhouse-keeper-03
     restart: unless-stopped
+    networks:
+      - default
+    extra_hosts:
+      - host.docker.internal:host-gateway
   clickhouse-03:
-    image: "clickhouse/clickhouse-server:25.3.14.14"
+    image: "clickhouse/clickhouse-server:26.7.1.1315"
     user: "101:101"
     container_name: clickhouse-03
     hostname: clickhouse-03
@@ -53,8 +61,12 @@ services:
       - clickhouse-keeper-02
       - clickhouse-keeper-03
     restart: unless-stopped
+    networks:
+      - default
+    extra_hosts:
+      - host.docker.internal:host-gateway
   clickhouse-keeper-01:
-    image: "clickhouse/clickhouse-keeper:25.3.14.14-alpine"
+    image: "clickhouse/clickhouse-keeper:26.7.1.1315-alpine"
     user: "101:101"
     container_name: clickhouse-keeper-01
     hostname: clickhouse-keeper-01
@@ -66,7 +78,7 @@ services:
       - "127.0.0.1:9181:9181"
     restart: unless-stopped
   clickhouse-keeper-02:
-    image: "clickhouse/clickhouse-keeper:25.3.14.14-alpine"
+    image: "clickhouse/clickhouse-keeper:26.7.1.1315-alpine"
     user: "101:101"
     container_name: clickhouse-keeper-02
     hostname: clickhouse-keeper-02
@@ -78,7 +90,7 @@ services:
       - "127.0.0.1:9182:9181"
     restart: unless-stopped
   clickhouse-keeper-03:
-    image: "clickhouse/clickhouse-keeper:25.3.14.14-alpine"
+    image: "clickhouse/clickhouse-keeper:26.7.1.1315-alpine"
     user: "101:101"
     container_name: clickhouse-keeper-03
     hostname: clickhouse-keeper-03

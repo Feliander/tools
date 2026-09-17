@@ -1,40 +1,41 @@
-services:
-  # caddy:
-  #   image: caddy:latest
-  #   container_name: caddy 
-  #   restart: unless-stopped
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./Caddyfile:/etc/caddy/Caddyfile
-  #     - caddy_data:/data
-  #     - caddy_config:/config
+x-minio-env: &minio-env
+  MINIO_ROOT_USER: miniouser
+  MINIO_ROOT_PASSWORD: admin123
 
-  minio:  
-    image: minio/minio:latest  
-    container_name: minio  
-    restart: unless-stopped  
-    volumes:  
-      - minio-storage:/data  
-      - minio-config:/root/.minio  
-    environment:  
-      - MINIO_ROOT_USER=miniouser
-      - MINIO_ROOT_PASSWORD=admin123
-      # - MINIO_BROWSER_REDIRECT_URL=https://your_domain.com/console/
-      # - MINIO_DOMAIN=your_domain.com  
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    restart: unless-stopped
+    environment: *minio-env
     command: server /data --console-address ":9001"
+    volumes:
+      - minio-storage:/data
+      - minio-config:/root/.minio
     ports:
       - "9000:9000"
       - "9001:9001"
-    healthcheck:  
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]  
-      interval: 30s  
-      timeout: 20s  
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
       retries: 3
 
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment: *minio-env
+    entrypoint:
+      - /bin/sh
+      - -c
+      - >-
+        mc alias set local http://minio:9000
+        "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD"
+        && mc mb --ignore-existing local/peerdb
+    restart: "no"
+
 volumes:
-  # caddy_data:
-  # caddy_config:
   minio-storage:
   minio-config:
